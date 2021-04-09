@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<title>Guessing</title>
+		<link rel="stylesheet" href="assets/css/style.css">
+	</head>
+	<body class="body" id="b">
+		<div class="wrapper">
+			<header class="header">
+				<h1>Добро пожаловать в игру <em>Отгадайка!</em></h1>
+			</header>
+
+			<nav class="nav">
+				<ul class="nav-list">
+					<li class="jQtooltip list-item"><a title="В этом разделе находятся правила игры." href="#">Правила</a></li>|
+					<li class="jQtooltip list-item"><a title="Об авторе, контакты, может что-то ещё добавится." href="#">Об издателе</a></li>
+				</ul>
+			</nav>
+
+			<main class="main">
+				<input class="user" id="user" type="text" placeholder="Введите букву.." title="Вы должны ввести только одну букву, для отгадки слова" maxlength="10"><br>
+
+				<div class="stats">
+					<div class="block-inf">
+						<div class="ms" id="ms">Ваша буква: <big class="msg" id="msg"></big></div>
+						<div class="ms" id="ms">Попытки: <big id="count"></big></div>
+						<div class="ms" id="ms">Количество оставшихся букв: <big id="countChar"></big></div>
+					</div>
+					<div class="status" id="status"></div>
+				</div>
+
+				<div class="end" id="end"></div><br>
+
+				<input class="btn" id="newGame" type="button" value="Новая игра">
+			</main>
+			<footer class="footer">
+				2017г &#10037;<a href="https://stormiks.github.io">Skylinker</a>
+			</footer>
+		</div>
+		<script src="assets/js/audio.js" type="text/javascript"></script>
+		<script src="assets/js/InitState.js"></script>
+		<script src="assets/js/newGame.js" type="text/javascript"></script>
+	</body>
+</html>
