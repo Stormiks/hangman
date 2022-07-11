@@ -1,246 +1,224 @@
 @font-face {
-	font-family: 'Roboto Black';
-	src:url(../fonts/RobotoBlack.ttf);
+  font-family: 'Roboto Black';
+  src: url('/assets/fonts/RobotoBlack.ttf');
 }
 
 @font-face {
-	font-family: 'Roboto Light';
-	src:url(../fonts/RobotoLight.ttf);
+  font-family: 'Roboto Light';
+  src: url('/assets/fonts/RobotoLight.ttf');
 }
 
-html, body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 h1 {
-	margin: 0;
+  margin: 0;
 }
 
 ul {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 li {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	background-image: url(../img/3-fon-dlya-sayta.jpg); ;
-	text-align: center;
+  font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-image: url('/assets/img/3-fon-dlya-sayta.jpg');
+  text-align: center;
 }
 
 .wrapper {
-    display: flex;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    -ms-flex-direction: column;
-    -o-flex-direction: column;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .header {
-    background: #FFC273;
-    border-radius: 10px;
-    border: 1px solid #F29721;
-    -webkit-box-shadow: 0px 0px 12px #785814;
-    box-shadow: 0px 0px 12px #785814;
-    margin: 20px;
-    padding: 14px;
-    width: 600px;
+  background: #FFC273;
+  border-radius: 10px;
+  border: 1px solid #F29721;
+  box-shadow: 0px 0px 12px #785814;
+  margin: 20px;
+  padding: 14px;
+  width: 600px;
 }
 
 .header h1 {
-	font-family: 'Rockwell Extra Bold';
-	color: #A65E00;
-	padding: 5px; /* Поля вокруг текста */
+  font-family: 'Rockwell Extra Bold';
+  color: #A65E00;
+  padding: 5px;
+  /* Поля вокруг текста */
 }
 
 .header em {
-	font-weight: bold;
-	color: #0D5004;
-	font-family: 'Roboto Black';
+  font-weight: bold;
+  color: #0D5004;
+  font-family: 'Roboto Black';
 }
 
 .nav {
-	width: 400px;
-	margin: 10px 15px 10px 15px;
-	padding: 5px;
+  width: 400px;
+  margin: 10px 15px 10px 15px;
+  padding: 5px;
 }
 
 .nav-list {
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    -webkit-flex-direction: row;
-    -moz-flex-direction: row;
-    -ms-flex-direction: row;
-    -o-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: wrap;
-    -moz-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    -o-flex-wrap: wrap;
-    flex-wrap: wrap;
-    padding: 0 4px;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0 4px;
 }
 
 .list-item {
-	background: #FDEFDD;
-	border-radius: 15px;
-	-webkit-box-shadow: 0px 0px 12px #785814;
-    box-shadow: 0px 0px 12px #785814;
-	padding: 2px 3px;
-	width: 45%;
+  background: #FDEFDD;
+  border-radius: 15px;
+  box-shadow: 0px 0px 12px #785814;
+  padding: 2px 3px;
+  width: 45%;
 }
 
 .list-item:hover {
-	-webkit-box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
-	box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
-	text-decoration: underline;
+  box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
+  text-decoration: underline;
 }
 
 .list-item a {
-	margin: 0px;
-	font-size: 14pt;
-	color: #E3C6A1;
-	text-decoration: none;
+  margin: 0px;
+  font-size: 14pt;
+  color: #E3C6A1;
+  text-decoration: none;
 }
 
 .list-item a:hover {
-	color: #BF8130;
+  color: #BF8130;
 }
 
 .main {
-	width: 500px;
-	background-image: url('../img/wood_3.jpg');
-	/*border: 1px solid #8B6138;*/
-	-webkit-box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
-	box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
-	border-radius: 14px;
-	padding: 10px 7px;
-	margin: 10px;
+  width: 500px;
+  background-image: url('/assets/img/wood_3.jpg');
+  /*border: 1px solid #8B6138;*/
+  box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
+  border-radius: 14px;
+  padding: 10px 7px;
+  margin: 10px;
 }
 
 .user {
-	display: inline;
-	color: #000000;
-	padding: 4px 4px 4px 20px;
-	margin: 2px;
-	font-family: 'Verdana';
-	font-size: 20px;
-	background-color: #FFBA61;
-	border: 1px solid #FBDC90;
-	border-radius: 20px;
+  display: inline;
+  color: #000000;
+  padding: 4px 4px 4px 20px;
+  margin: 2px;
+  font-family: 'Verdana';
+  font-size: 20px;
+  background-color: #FFBA61;
+  border: 1px solid #FBDC90;
+  border-radius: 20px;
 }
 
 .stats {
-    /* font-style: oblique; */
-    /* font-size: 18px; */
-    /* font-family: Arial; */
-    border: 1px dotted #5E3956;
-    border-radius: 5px;
-    background-image: url(../img/5-fon-svetlogo-melkogo-karbona-dlya-sayta.png);
-    margin: 5px 10px 2px 10px;
-    padding: 20px;
+  /* font-style: oblique; */
+  /* font-size: 18px; */
+  /* font-family: Arial; */
+  border: 1px dotted #5E3956;
+  border-radius: 5px;
+  background-image: url('/assets/img/5-fon-svetlogo-melkogo-karbona-dlya-sayta.png');
+  margin: 5px 10px 2px 10px;
+  padding: 20px;
 }
 
 .block-inf {
-	text-align: left;
+  text-align: left;
 }
 
 .ms {
-	color: #010100;
-	font-size: 16pt;
-	letter-spacing: 1px;
-	font-family: 'Roboto Light';
+  color: #010100;
+  font-size: 16pt;
+  letter-spacing: 1px;
+  font-family: 'Roboto Light';
 }
 
 .msg {
-    color: #801E1E;
-    /* background: #D2C079; */
-    font-weight: bolder;
-    font-style: italic;
-    font-size: 25px;
-    /* border: 1px solid; */
-    border-radius: 4px;
-    padding: 0px 3px 0px 3px;
-    margin: 0px 0px 0px 10px;
-    /* width: 10px; */
+  color: #801E1E;
+  /* background: #D2C079; */
+  font-weight: bolder;
+  font-style: italic;
+  font-size: 25px;
+  /* border: 1px solid; */
+  border-radius: 4px;
+  padding: 0px 3px 0px 3px;
+  margin: 0px 0px 0px 10px;
+  /* width: 10px; */
 }
 
 .status {
-	border-radius: 7px;
-	color: #B27E00;
-	font-weight: bolder;
-	font-size: 30px;
-	background-color: #FFBA61;
-	margin: 20px 10px 10px 10px;
-	padding: 5px;
-	height: 35px;
+  border-radius: 7px;
+  color: #B27E00;
+  font-weight: bolder;
+  font-size: 30px;
+  background-color: #FFBA61;
+  margin: 20px 10px 10px 10px;
+  padding: 5px;
+  height: 35px;
 }
 
 .end {
-	background-color: #FFFFFF;
-	border-radius: 7px;
-	color: #8B6200;
-	height: 20px;
-	margin: 20px 10px 10px 10px;
-	padding: 5px;
+  background-color: #FFFFFF;
+  border-radius: 7px;
+  color: #8B6200;
+  height: 20px;
+  margin: 20px 10px 10px 10px;
+  padding: 5px;
 }
 
 .btn {
-	color: #DDB27A;
-	background-color: #A65E00;
-	border: none;
-	border-radius: 15px;
-	-webkit-box-shadow: 0px 2px 10px 1px black;
-	box-shadow: 0px 2px 10px 1px black;
-	font-size: 13pt;
-	font-family: "Times New Roman", Times, Baskerville, Georgia, serif;
-	letter-spacing: 1px;
-	padding: 6px;
-	width: 150px;
+  color: #DDB27A;
+  background-color: #A65E00;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 2px 10px 1px black;
+  font-size: 13pt;
+  font-family: "Times New Roman", Times, Baskerville, Georgia, serif;
+  letter-spacing: 1px;
+  padding: 6px;
+  width: 150px;
 }
 
 .btn:hover {
-	color: #DDB27A;
-	background-color: #703F00;
-	-webkit-box-shadow: inset 0 0 2px 1px #F4E5C6, 0px 2px 7px 1px #412B00;
-	box-shadow: inset 0 0 2px 1px #F4E5C6, 0px 2px 7px 1px #412B00;
+  color: #DDB27A;
+  background-color: #703F00;
+  box-shadow: inset 0 0 2px 1px #F4E5C6, 0px 2px 7px 1px #412B00;
 }
 
 .footer {
-    background-color: #FFC273;
-    border-radius: 10px;
-    border: 1px solid #F29721;
-    margin: 20px;
-    padding: 14px;
-    width: 600px;
+  background-color: #FFC273;
+  border-radius: 10px;
+  border: 1px solid #F29721;
+  margin: 20px;
+  padding: 14px;
+  width: 600px;
 }
 
 .footer a {
-	margin: 0px;
-	font-size: 14pt;
-	color: #BF8130;
-	text-decoration: none;
+  margin: 0px;
+  font-size: 14pt;
+  color: #BF8130;
+  text-decoration: none;
 }
 
-.footer a:hover, .footer a:visited {
-	color: #BF8130;
+.footer a:hover,
+.footer a:visited {
+  color: #BF8130;
 }

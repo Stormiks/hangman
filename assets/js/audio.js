@@ -1,7 +1,7 @@
 ﻿function loadAudio (arr, vol) {
-	var audio = document.createElement('audio');
-	for (var i = 0; len = arr.length, i < len; i++) {
-		var source = document.createElement('source'); // Создаём в документе элемент audio
+	const audio = document.createElement('audio');
+	for (let i = 0; len = arr.length, i < len; i++) {
+		const source = document.createElement('source'); // Создаём в документе элемент audio
 		source.src = arr[i]; // Создаём ссылки на audio-элементы
 		audio.appendChild(source); // Добавляем ресурсы в audio
 	};
@@ -9,7 +9,7 @@
 	audio.volume = 1 || vol;
 
 	/* Создаём объект audio с свойствами по умолчанию */
-	var obj = {
+	const obj = {
 		dom: false,
 		state: 'play',
 
@@ -39,12 +39,11 @@
 	return obj;
 }
 
-var theme = loadAudio(["assets/audio/Chernobil_Zona_otchugdenija.mp3"], 1);
+const theme = loadAudio(["assets/audio/Chernobil_Zona_otchugdenija.mp3"], 1);
 
-var a;
+let a;
 
 setInterval(function () {
-
   if (a == 51) { // Цифровая клавиша "3"
   	theme.play();
   }

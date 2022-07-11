@@ -1,31 +1,25 @@
 'use strict'
 window.onkeyup = function () {
-	var valSt = st.innerHTML;
-	var valC = c.innerHTML;
-	var valCc = cC.innerHTML;
+	const valSt = st.innerHTML;
+	const valC = c.innerHTML;
+	const valCc = cC.innerHTML;
 
-	console.log(valSt);
-	console.log(valC);
-	console.log(valCc);
-
-	var user = document.getElementById('user').value; // Получаем значение поле ввода
-	var msg = document.getElementById('msg'); // Для вывода буквы и предупреждений
-	console.log(user);
+	const user = document.getElementById('user').value; // Получаем значение поле ввода
+	const msg = document.getElementById('msg'); // Для вывода буквы и предупреждений
 	/* Проверяем на пустоту форму */
 	if (user !== "") {
-		var toString = user.toUpperCase(); // Верхний регистр
-		console.log(toString);
+		const toString = user.toUpperCase(); // Верхний регистр
 		msg.innerHTML = toString; // Введённая текущая буква в форме
 	} else {
 		msg.innerHTML = 'Пустое поле ввода'; // Приводим к нижнему регистру
 	}
 
-	var u = user.toLowerCase(); // Приводим к нижнему регистру
+	const u = user.toLowerCase(); // Приводим к нижнему регистру
 	/* Проверяем на кол-во букв в форме */
 	if (u.length !== 1 && u.length !== 0) {
 		msg.innerHTML = 'Нужна одна буква!';
 	} else {
-		for (var j = 0; j < word.length; j++) {
+		for (let j = 0; j < word.length; j++) {
 			/* Если имеется совпадение с угаданной раннее буквой */
 			if (answerArray[j] === u) {
 				msg.innerHTML = 'Имеется такая буква!';
@@ -56,9 +50,9 @@ window.onkeyup = function () {
 }
 
 function winCheck() {
-    if (remainingLetters >= 1 && counts == 0) {
-        e.innerHTML = 'Вы проиграли! Было загадо слово: ' + word;
-    }
+  if (remainingLetters >= 1 && counts == 0) {
+    e.innerHTML = 'Вы проиграли! Было загадо слово: ' + word;
+  }
 }
 
 // function refrechStatus() {

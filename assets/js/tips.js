@@ -2,8 +2,8 @@
 $(function() {
 
   $('.jQtooltip').each(function() {
-    var el = $(this);
-    var title = el.attr('title');
+    const el = $(this);
+    let title = el.attr('title');
     if (title && title != '') {
       el.attr('title', '').append('<div>' + title + '</div>');
       var width = el.find('div').width();
