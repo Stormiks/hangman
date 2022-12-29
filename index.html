@@ -8,7 +8,7 @@
 </head>
 
 <body class="body" id="b">
-  <div x-data="app" class="wrapper">
+  <div class="wrapper">
     <header class="header">
       <h1>Добро пожаловать в игру <em>Отгадайка!</em></h1>
     </header>
@@ -25,43 +25,170 @@
       </ul>
     </nav>
 
-    <main class="main">
-      <input class="user" id="user" type="text" placeholder="Введите букву.."
-        title="Вы должны ввести только одну букву, для отгадки слова" maxlength="10"><br>
+    <main x-data="app" class="main">
+      <label>
+        Буква:
+        <input
+          class="user"
+          type="text"
+          maxlength="3"
+          x-model="userAnswerChar"
+          @input="onChangeInput"
+        >
+      </label>
+      <br>
 
       <div class="stats">
         <div class="block-inf">
-          <div class="ms" id="ms">Ваша буква: <big class="msg" id="msg"></big></div>
-          <div class="ms" id="ms">Попытки: <big id="count"></big></div>
-          <div class="ms" id="ms">Количество оставшихся букв: <big id="countChar"></big></div>
+          <div class="ms">Ваша буква: <big x-text="outUserAnswer" class="msg" id="msg"></big></div>
+          <div class="ms">Попытки: <big x-text="countAnswer"></big></div>
+          <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
         </div>
-        <div class="status" id="status"></div>
+        <div x-text="outUserStatus" class="status"></div>
       </div>
 
-      <div class="end" id="end"></div><br>
+      <div class="end" x-text="statusGame"></div>
+      <br>
 
-      <button class="btn" id="newGame" type="button">Новая игра</button>
+      <button
+        class="btn"
+        id="newGame"
+        @click="onLaunchNewGame"
+        x-bind:disabled="isStartGame"
+      >Новая игра</button>
     </main>
 
-    <footer class="footer">
-      <span x-text="currentYear()"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
+    <footer x-data="footer" class="footer">
+      <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
     </footer>
   </div>
   <script>
       document.addEventListener('alpine:init', () => {
         Alpine.data('app', () => ({
-          currentYear() {
-            return dayjs().format('YYYY')
+          words: [],
+          word: '',
+          wordChars: [],
+          countAnswer: 0,
+          answer: [],
+          userAnswerChar: '',
+          outUserAnswer: '',
+          statusGame: '',
+          isStartGame: false,
+          get outUserStatus () {
+            return this.answer.join('.');
+          },
+          get remainingLetters() {
+            return this.answer.filter((char) => char === '_').length;
+          },
+          get hasCountAnswerGame() {
+            return this.countAnswer > 0
+          },
+          get hasRemainingLetters() {
+            return this.remainingLetters > 0
+          },
+          get hasWinnerGame() {
+            return this.hasCountAnswerGame && !this.hasRemainingLetters
+          },
+          validateUserAnswer(val) {
+            if (!this.wordChars.includes(val)) {
+              return false;
+            }
+
+            if (this.answer.includes(val)) {
+              return false;
+            }
+
+            return true;
+          },
+          getAnswer() {
+            const word = this.word ? this.word.split('') : [];
+
+            if (!word.length) {
+              return;
+            }
+
+            word.forEach((w, index) => {
+              this.answer.push("_");
+            });
+          },
+          askWord() {
+            const word = this.words.length ? this.words[Math.floor(Math.random() * this.words.length)] : '';
+
+            this.word = word;
+            this.wordChars = word.split('');
+            this.getAnswer();
+          },
+          onChangeInput(e) {
+            if (!this.isStartGame) {
+              return false
+            }
+
+            if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
+              return false;
+            }
+
+            if (e.data === '') {
+              return false;
+            }
+
+            this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data
+
+            if (this.validateUserAnswer(e.data)) {
+              this.outUserAnswer = String(e.data).toUpperCase();
+
+              const charPositions = this.wordChars.reduce((acc, char, index) => {
+                if (char === e.data) {
+                  acc[index] = char;
+                }
+
+                return acc;
+              }, {});
+
+              for (let key of Object.keys(charPositions)) {
+                this.answer[key] = this.wordChars[key];
+              }
+            } else {
+              --this.countAnswer;
+            }
+
+            if (!this.hasCountAnswerGame) {
+              this.statusGame = 'Вы проиграли! :(';
+              this.isStartGame = false;
+            } else if (!this.hasRemainingLetters) {
+              this.statusGame = 'Вы выиграли! :)';
+              this.isStartGame = false;
+            }
+          },
+          onLaunchNewGame() {
+            this.askWord();
+            this.countAnswer = (this.remainingLetters / 1.7).toFixed()
+            this.isStartGame = true;
+          },
+          init() {
+            fetch('/db-words.json', {
+              method: 'GET',
+            }).then((data) => data.json())
+              .then((data) => {
+                this.words = data;
+                this.onLaunchNewGame()
+              });
+          },
+        }));
+
+        Alpine.data('footer', () => ({
+          year: '',
+          getCurrentYear() {
+            return dayjs().format('YYYY');
+          },
+          init() {
+            this.year = this.getCurrentYear()
           }
-        }))
+        }));
       })
   </script>
-  <script src="/assets/js/jquery-3.6.0.js"></script>
   <script src="/assets/js/dayjs.min.js"></script>
-  <script src="/assets/js/alpinejs.js"></script>
-  <script src="/assets/js/audio.js"></script>
-  <script src="/assets/js/InitState.js"></script>
-  <script src="/assets/js/newGame.js"></script>
+  <script src="/assets/js/alpinejs.js?v=3.10.5"></script>
+  <!-- <script src="/assets/js/audio.js"></script> -->
 </body>
 
 </html>
