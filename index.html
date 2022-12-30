@@ -3,65 +3,64 @@
 
 <head>
   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Hangman</title>
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
-<body class="body" id="b">
-  <div class="wrapper">
-    <header class="header">
-      <h1>Добро пожаловать в игру <em>Отгадайка!</em></h1>
-    </header>
+<body class="body">
+  <header class="header">
+    <h1>Добро пожаловать в игру <em>Отгадайка!</em></h1>
+  </header>
 
-    <nav class="nav">
-      <ul class="nav-list">
-        <li class="jQtooltip list-item">
-          <a title="В этом разделе находятся правила игры." href="#">Правила</a>
-        </li>|
-        <li class="jQtooltip list-item">
-          <a title="Об авторе, контакты, может что-то ещё добавится." href="#">Об
-            издателе</a>
-          </li>
-      </ul>
-    </nav>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="jQtooltip list-item">
+        <a title="В этом разделе находятся правила игры." href="#">Правила</a>
+      </li>|
+      <li class="jQtooltip list-item">
+        <a title="Об авторе, контакты, может что-то ещё добавится." href="#">Об
+          издателе</a>
+        </li>
+    </ul>
+  </nav>
 
-    <main x-data="app" class="main">
-      <label>
-        Буква:
-        <input
-          class="user"
-          type="text"
-          maxlength="3"
-          x-model="userAnswerChar"
-          @input="onChangeInput"
-        >
-      </label>
-      <br>
+  <main x-data="app" class="main">
+    <label>
+      Буква:
+      <input
+        class="user"
+        type="text"
+        maxlength="3"
+        x-model="userAnswerChar"
+        x-on:input="onChangeInput"
+      >
+    </label>
+    <br>
 
-      <div class="stats">
-        <div class="block-inf">
-          <div class="ms">Ваша буква: <big x-text="outUserAnswer" class="msg" id="msg"></big></div>
-          <div class="ms">Попытки: <big x-text="countAnswer"></big></div>
-          <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
-        </div>
-        <div x-text="outUserStatus" class="status"></div>
+    <div class="stats">
+      <div class="block-inf">
+        <div class="ms">Ваша буква: <big x-text="outUserAnswer" class="msg" id="msg"></big></div>
+        <div class="ms">Попытки: <big x-text="countAnswer"></big></div>
+        <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
       </div>
+      <div x-text="outUserStatus" class="status"></div>
+    </div>
 
-      <div class="end" x-text="statusGame"></div>
-      <br>
+    <div class="end" x-text="statusGame"></div>
+    <br>
 
-      <button
-        class="btn"
-        id="newGame"
-        @click="onLaunchNewGame"
-        x-bind:disabled="isStartGame"
-      >Новая игра</button>
-    </main>
+    <button
+      class="btn"
+      id="newGame"
+      x-on:click="onLaunchNewGame"
+      x-bind:disabled="isStartGame"
+    >Новая игра</button>
+  </main>
 
-    <footer x-data="footer" class="footer">
-      <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
-    </footer>
-  </div>
+  <footer x-data="footer" class="footer">
+    <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
+  </footer>
   <script>
       document.addEventListener('alpine:init', () => {
         Alpine.data('app', () => ({
@@ -188,7 +187,6 @@
   </script>
   <script src="/assets/js/dayjs.min.js"></script>
   <script src="/assets/js/alpinejs.js?v=3.10.5"></script>
-  <!-- <script src="/assets/js/audio.js"></script> -->
 </body>
 
 </html>

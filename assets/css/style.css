@@ -31,24 +31,27 @@ li {
 }
 
 .body {
+  display: grid;
+  grid-template-rows: 120px 64px 1fr 92px;
   font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-image: url('/assets/img/3-fon-dlya-sayta.jpg');
+  background-image: url('/assets/img/3-fon-chars.jpg');
   text-align: center;
 }
 
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+.header,
+.nav,
+.main,
+.footer {
+  align-self: center;
+  justify-self: center;
 }
 
 .header {
   background: #FFC273;
   border-radius: 10px;
   border: 1px solid #F29721;
-  box-shadow: 0px 0px 12px #785814;
-  margin: 20px;
+  box-shadow: 0 0 12px #785814;
+  margin: 15px;
   padding: 14px;
   width: 600px;
 }
@@ -84,18 +87,18 @@ li {
 .list-item {
   background: #FDEFDD;
   border-radius: 15px;
-  box-shadow: 0px 0px 12px #785814;
+  box-shadow: 0 0 12px #785814;
   padding: 2px 3px;
   width: 45%;
 }
 
 .list-item:hover {
-  box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
+  box-shadow: 0 0 6px #785814, inset 0 0 5px #F4E5C6;
   text-decoration: underline;
 }
 
 .list-item a {
-  margin: 0px;
+  margin: 0;
   font-size: 14pt;
   color: #E3C6A1;
   text-decoration: none;
@@ -106,12 +109,12 @@ li {
 }
 
 .main {
+  align-self: center;
   width: 500px;
   background-image: url('/assets/img/wood_3.jpg');
-  box-shadow: 0px 0px 6px #785814, inset 0px 0px 5px #F4E5C6;
+  box-shadow: 0 0 6px #785814, inset 0 0 5px #F4E5C6;
   border-radius: 14px;
   padding: 10px 7px;
-  margin: 10px;
 }
 
 .user {
@@ -133,7 +136,7 @@ li {
 .stats {
   border: 1px dotted #5E3956;
   border-radius: 5px;
-  background-image: url('/assets/img/5-fon-svetlogo-melkogo-karbona-dlya-sayta.png');
+  background-image: url('/assets/img/5-fon-svetlogo-melkogo-karbona.png');
   margin: 5px 10px 2px 10px;
   padding: 20px;
 }
@@ -155,8 +158,8 @@ li {
   font-style: italic;
   font-size: 25px;
   border-radius: 4px;
-  padding: 0px 3px 0px 3px;
-  margin: 0px 0px 0px 10px;
+  padding: 0 3px 0 3px;
+  margin: 0 0 0 10px;
 }
 
 .status {
@@ -184,7 +187,7 @@ li {
   background-color: #A65E00;
   border: none;
   border-radius: 15px;
-  box-shadow: 0px 2px 10px 1px #000;
+  box-shadow: 0 2px 10px 1px #000;
   font-size: 13pt;
   font-family: "Times New Roman", Times, Baskerville, Georgia, serif;
   letter-spacing: 1px;
@@ -200,7 +203,7 @@ li {
 .btn:not([disabled]):hover {
   color: #DDB27A;
   background-color: #703F00;
-  box-shadow: inset 0 0 2px 1px #F4E5C6, 0px 2px 7px 1px #412B00;
+  box-shadow: inset 0 0 2px 1px #F4E5C6, 0 2px 7px 1px #412B00;
 }
 
 .footer {
@@ -213,7 +216,7 @@ li {
 }
 
 .footer a {
-  margin: 0px;
+  margin: 0;
   font-size: 14pt;
   color: #BF8130;
   text-decoration: none;
