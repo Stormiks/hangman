@@ -41,10 +41,10 @@
     <div class="stats">
       <div class="block-inf">
         <div class="ms">Ваша буква: <big x-text="outUserAnswer" class="msg" id="msg"></big></div>
-        <div class="ms">Попытки: <big x-text="countAnswer"></big></div>
+        <div class="ms">Попытки: <big x-text="attempts"></big></div>
         <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
       </div>
-      <div x-text="outUserStatus" class="status"></div>
+      <div x-text="statusMatchedLetters" class="status"></div>
     </div>
 
     <div class="end" x-text="statusGame"></div>
@@ -54,7 +54,7 @@
       class="btn"
       id="newGame"
       x-on:click="onLaunchNewGame"
-      x-bind:disabled="isStartGame"
+      x-bind:disabled="gameStarted"
     >Новая игра</button>
   </main>
 
@@ -65,22 +65,22 @@
       document.addEventListener('alpine:init', () => {
         Alpine.data('app', () => ({
           words: [],
-          word: '',
-          wordChars: [],
-          countAnswer: 0,
-          answer: [],
+          randomWord: '',
+          letters: [],
+          attempts: 0,
+          matchedLetters: [],
           userAnswerChar: '',
           outUserAnswer: '',
           statusGame: '',
-          isStartGame: false,
-          get outUserStatus () {
-            return this.answer.join('.');
+          gameStarted: false,
+          get statusMatchedLetters () {
+            return this.matchedLetters.join('.');
           },
           get remainingLetters() {
-            return this.answer.filter((char) => char === '_').length;
+            return this.matchedLetters.filter((char) => char === '_').length;
           },
           get hasCountAnswerGame() {
-            return this.countAnswer > 0
+            return this.attempts > 0
           },
           get hasRemainingLetters() {
             return this.remainingLetters > 0
@@ -89,36 +89,32 @@
             return this.hasCountAnswerGame && !this.hasRemainingLetters
           },
           validateUserAnswer(val) {
-            if (!this.wordChars.includes(val)) {
+            if (!this.letters.includes(val)) {
               return false;
             }
 
-            if (this.answer.includes(val)) {
+            if (this.matchedLetters.includes(val)) {
               return false;
             }
 
             return true;
           },
-          getAnswer() {
-            const word = this.word ? this.word.split('') : [];
-
-            if (!word.length) {
-              return;
-            }
+          splitLetters() {
+            const word = this.randomWord.split('')
 
             word.forEach((w, index) => {
-              this.answer.push("_");
+              this.matchedLetters.push("_");
             });
           },
           askWord() {
-            const word = this.words.length ? this.words[Math.floor(Math.random() * this.words.length)] : '';
-
-            this.word = word;
-            this.wordChars = word.split('');
-            this.getAnswer();
+            const randomNumber = Math.floor(Math.random() * this.words.length);
+            const word = this.words.splice(randomNumber, 1)[0];
+            this.randomWord = word;
+            this.letters = word.split('');
+            this.splitLetters();
           },
           onChangeInput(e) {
-            if (!this.isStartGame) {
+            if (!this.gameStarted) {
               return false
             }
 
@@ -135,7 +131,7 @@
             if (this.validateUserAnswer(e.data)) {
               this.outUserAnswer = String(e.data).toUpperCase();
 
-              const charPositions = this.wordChars.reduce((acc, char, index) => {
+              const charPositions = this.letters.reduce((acc, char, index) => {
                 if (char === e.data) {
                   acc[index] = char;
                 }
@@ -144,24 +140,24 @@
               }, {});
 
               for (let key of Object.keys(charPositions)) {
-                this.answer[key] = this.wordChars[key];
+                this.matchedLetters[key] = this.letters[key];
               }
             } else {
-              --this.countAnswer;
+              --this.attempts;
             }
 
             if (!this.hasCountAnswerGame) {
               this.statusGame = 'Вы проиграли! :(';
-              this.isStartGame = false;
+              this.gameStarted = false;
             } else if (!this.hasRemainingLetters) {
               this.statusGame = 'Вы выиграли! :)';
-              this.isStartGame = false;
+              this.gameStarted = false;
             }
           },
           onLaunchNewGame() {
             this.askWord();
-            this.countAnswer = (this.remainingLetters / 1.7).toFixed()
-            this.isStartGame = true;
+            this.attempts = (this.remainingLetters / 1.7).toFixed()
+            this.gameStarted = true;
           },
           init() {
             fetch('/db-words.json', {
