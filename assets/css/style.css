@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Roboto Black';
-  src: url('/assets/fonts/RobotoBlack.ttf');
+  src: url('/hangman/assets/fonts/RobotoBlack.ttf');
 }
 
 @font-face {
   font-family: 'Roboto Light';
-  src: url('/assets/fonts/RobotoLight.ttf');
+  src: url('/hangman/assets/fonts/RobotoLight.ttf');
 }
 
 html,
@@ -34,7 +34,7 @@ li {
   display: grid;
   grid-template-rows: 120px 64px 1fr 92px;
   font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-image: url('/assets/img/3-fon-chars.jpg');
+  background-image: url('/hangman/assets/img/3-fon-chars.jpg');
   text-align: center;
 }
 
@@ -111,7 +111,7 @@ li {
 .main {
   align-self: center;
   width: 500px;
-  background-image: url('/assets/img/wood_3.jpg');
+  background-image: url('/hangman/assets/img/wood_3.jpg');
   box-shadow: 0 0 6px #785814, inset 0 0 5px #F4E5C6;
   border-radius: 14px;
   padding: 10px 7px;
@@ -136,7 +136,7 @@ li {
 .stats {
   border: 1px dotted #5E3956;
   border-radius: 5px;
-  background-image: url('/assets/img/5-fon-svetlogo-melkogo-karbona.png');
+  background-image: url('/hangman/assets/img/5-fon-svetlogo-melkogo-karbona.png');
   margin: 5px 10px 2px 10px;
   padding: 20px;
 }

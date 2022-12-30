@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Hangman</title>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/hangman/assets/css/style.css">
 </head>
 
 <body class="body">
@@ -161,7 +161,7 @@
           this.gameStarted = true;
         },
         init() {
-          fetch('/db-words.json', {
+          fetch('/hangman/db-words.json', {
             method: 'GET',
           }).then((data) => data.json())
             .then((data) => {
@@ -182,8 +182,8 @@
       }));
     })
   </script>
-  <script src="/assets/js/dayjs.min.js"></script>
-  <script src="/assets/js/alpinejs.js?v=3.10.5"></script>
+  <script src="/hangman/assets/js/dayjs.min.js"></script>
+  <script src="/hangman/assets/js/alpinejs.js?v=3.10.5"></script>
 </body>
 
 </html>
