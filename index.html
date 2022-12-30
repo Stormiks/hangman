@@ -26,6 +26,9 @@
   </nav>
 
   <main x-data="app" class="main">
+    <div class="tips-all-words">
+      <p>Слов в базе: <span x-text="countAllWordsDB"></span></p>
+    </div>
     <label>
       Буква:
       <input
@@ -66,6 +69,7 @@
     document.addEventListener('alpine:init', () => {
       Alpine.data('app', () => ({
         words: [],
+        countAllWordsDB: 0,
         randomWord: '',
         letters: [],
         attempts: 0,
@@ -81,13 +85,13 @@
           return this.matchedLetters.filter((char) => char === '_').length;
         },
         get hasCountAnswerGame() {
-          return this.attempts > 0
+          return this.attempts > 0;
         },
         get hasRemainingLetters() {
-          return this.remainingLetters > 0
+          return this.remainingLetters > 0;
         },
         get hasWinnerGame() {
-          return this.hasCountAnswerGame && !this.hasRemainingLetters
+          return this.hasCountAnswerGame && !this.hasRemainingLetters;
         },
         validateUserAnswer(val) {
           if (!this.letters.includes(val)) {
@@ -157,7 +161,7 @@
         },
         onLaunchNewGame() {
           this.askWord();
-          this.attempts = (this.remainingLetters / 1.7).toFixed()
+          this.attempts = (this.remainingLetters / 1.7).toFixed();
           this.gameStarted = true;
         },
         init() {
@@ -165,8 +169,9 @@
             method: 'GET',
           }).then((data) => data.json())
             .then((data) => {
+              this.countAllWordsDB = data.length;
               this.words = data;
-              this.onLaunchNewGame()
+              this.onLaunchNewGame();
             });
         },
       }));
@@ -177,10 +182,10 @@
           return dayjs().format('YYYY');
         },
         init() {
-          this.year = this.getCurrentYear()
+          this.year = this.getCurrentYear();
         }
       }));
-    })
+    });
   </script>
   <script src="/assets/js/dayjs.min.js"></script>
   <script src="/assets/js/alpinejs.js?v=3.10.5"></script>
