@@ -62,124 +62,125 @@
     <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
   </footer>
   <script>
-      document.addEventListener('alpine:init', () => {
-        Alpine.data('app', () => ({
-          words: [],
-          randomWord: '',
-          letters: [],
-          attempts: 0,
-          matchedLetters: [],
-          userAnswerChar: '',
-          outUserAnswer: '',
-          statusGame: '',
-          gameStarted: false,
-          get statusMatchedLetters () {
-            return this.matchedLetters.join('.');
-          },
-          get remainingLetters() {
-            return this.matchedLetters.filter((char) => char === '_').length;
-          },
-          get hasCountAnswerGame() {
-            return this.attempts > 0
-          },
-          get hasRemainingLetters() {
-            return this.remainingLetters > 0
-          },
-          get hasWinnerGame() {
-            return this.hasCountAnswerGame && !this.hasRemainingLetters
-          },
-          validateUserAnswer(val) {
-            if (!this.letters.includes(val)) {
-              return false;
-            }
-
-            if (this.matchedLetters.includes(val)) {
-              return false;
-            }
-
-            return true;
-          },
-          splitLetters() {
-            const word = this.randomWord.split('')
-
-            word.forEach((w, index) => {
-              this.matchedLetters.push("_");
-            });
-          },
-          askWord() {
-            const randomNumber = Math.floor(Math.random() * this.words.length);
-            const word = this.words.splice(randomNumber, 1)[0];
-            this.randomWord = word;
-            this.letters = word.split('');
-            this.splitLetters();
-          },
-          onChangeInput(e) {
-            if (!this.gameStarted) {
-              return false
-            }
-
-            if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
-              return false;
-            }
-
-            if (e.data === '') {
-              return false;
-            }
-
-            this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data
-
-            if (this.validateUserAnswer(e.data)) {
-              this.outUserAnswer = String(e.data).toUpperCase();
-
-              const charPositions = this.letters.reduce((acc, char, index) => {
-                if (char === e.data) {
-                  acc[index] = char;
-                }
-
-                return acc;
-              }, {});
-
-              for (let key of Object.keys(charPositions)) {
-                this.matchedLetters[key] = this.letters[key];
-              }
-            } else {
-              --this.attempts;
-            }
-
-            if (!this.hasCountAnswerGame) {
-              this.statusGame = 'Вы проиграли! :(';
-              this.gameStarted = false;
-            } else if (!this.hasRemainingLetters) {
-              this.statusGame = 'Вы выиграли! :)';
-              this.gameStarted = false;
-            }
-          },
-          onLaunchNewGame() {
-            this.askWord();
-            this.attempts = (this.remainingLetters / 1.7).toFixed()
-            this.gameStarted = true;
-          },
-          init() {
-            fetch('/db-words.json', {
-              method: 'GET',
-            }).then((data) => data.json())
-              .then((data) => {
-                this.words = data;
-                this.onLaunchNewGame()
-              });
-          },
-        }));
-
-        Alpine.data('footer', () => ({
-          year: '',
-          getCurrentYear() {
-            return dayjs().format('YYYY');
-          },
-          init() {
-            this.year = this.getCurrentYear()
+    // Word base taken from https://github.com/Harrix/Russian-Nouns
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('app', () => ({
+        words: [],
+        randomWord: '',
+        letters: [],
+        attempts: 0,
+        matchedLetters: [],
+        userAnswerChar: '',
+        outUserAnswer: '',
+        statusGame: '',
+        gameStarted: false,
+        get statusMatchedLetters () {
+          return this.matchedLetters.join('.');
+        },
+        get remainingLetters() {
+          return this.matchedLetters.filter((char) => char === '_').length;
+        },
+        get hasCountAnswerGame() {
+          return this.attempts > 0
+        },
+        get hasRemainingLetters() {
+          return this.remainingLetters > 0
+        },
+        get hasWinnerGame() {
+          return this.hasCountAnswerGame && !this.hasRemainingLetters
+        },
+        validateUserAnswer(val) {
+          if (!this.letters.includes(val)) {
+            return false;
           }
-        }));
-      })
+
+          if (this.matchedLetters.includes(val)) {
+            return false;
+          }
+
+          return true;
+        },
+        splitLetters() {
+          const word = this.randomWord.split('')
+
+          word.forEach((w, index) => {
+            this.matchedLetters.push("_");
+          });
+        },
+        askWord() {
+          const randomNumber = Math.floor(Math.random() * this.words.length);
+          const secretWord = this.words.splice(randomNumber, 1)[0];
+          this.randomWord = secretWord;
+          this.letters = secretWord.split('');
+          this.splitLetters();
+        },
+        onChangeInput(e) {
+          if (!this.gameStarted) {
+            return false
+          }
+
+          if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
+            return false;
+          }
+
+          if (e.data === '') {
+            return false;
+          }
+
+          this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data
+
+          if (this.validateUserAnswer(e.data)) {
+            this.outUserAnswer = String(e.data).toUpperCase();
+
+            const charPositions = this.letters.reduce((acc, char, index) => {
+              if (char === e.data) {
+                acc[index] = char;
+              }
+
+              return acc;
+            }, {});
+
+            for (let key of Object.keys(charPositions)) {
+              this.matchedLetters[key] = this.letters[key];
+            }
+          } else {
+            --this.attempts;
+          }
+
+          if (!this.hasCountAnswerGame) {
+            this.statusGame = 'Вы проиграли! :(';
+            this.gameStarted = false;
+          } else if (!this.hasRemainingLetters) {
+            this.statusGame = 'Вы выиграли! :)';
+            this.gameStarted = false;
+          }
+        },
+        onLaunchNewGame() {
+          this.askWord();
+          this.attempts = (this.remainingLetters / 1.7).toFixed()
+          this.gameStarted = true;
+        },
+        init() {
+          fetch('/db-words.json', {
+            method: 'GET',
+          }).then((data) => data.json())
+            .then((data) => {
+              this.words = data;
+              this.onLaunchNewGame()
+            });
+        },
+      }));
+
+      Alpine.data('footer', () => ({
+        year: '',
+        getCurrentYear() {
+          return dayjs().format('YYYY');
+        },
+        init() {
+          this.year = this.getCurrentYear()
+        }
+      }));
+    })
   </script>
   <script src="/assets/js/dayjs.min.js"></script>
   <script src="/assets/js/alpinejs.js?v=3.10.5"></script>
