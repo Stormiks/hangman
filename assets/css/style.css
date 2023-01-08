@@ -218,6 +218,50 @@ li {
   box-shadow: inset 0 0 2px 1px #F4E5C6, 0 2px 7px 1px #412B00;
 }
 
+.alphabet-wrapper {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.alphabet .letter {
+  display: inline-block;
+  margin: 3px 3px;
+  box-sizing: content-box;
+}
+
+.alphabet button {
+  line-height: 1.4;
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #ddd;
+  border: none;
+  width: 1.4em;
+  height: 1.4em;
+}
+
+.alphabet .alphabet-letter button {
+  color: #333;
+  transition: all 0.1s ease;
+}
+
+
+.alphabet .alphabet-letter button:hover,
+.alphabet .alphabet-letter button:focus {
+  background: #607d8b;
+  color: #fff;
+}
+
+.clicked-letter {
+  pointer-events: none;
+}
+
+.clicked-letter button {
+  color: #a9a9a9;
+}
+
 .footer {
   background-color: #FFC273;
   border-radius: 10px;

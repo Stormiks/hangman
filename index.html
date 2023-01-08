@@ -44,6 +44,32 @@
         <div class="ms">Попытки: <big x-text="attempts"></big></div>
         <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
       </div>
+      <div class="alphabet-wrapper">
+        <ul class="alphabet">
+          <template
+            x-for="item in $store.dbWords.alphabet"
+          >
+            <li
+              class="letter"
+              x-bind:class="clickedLetters.includes(item) ? 'clicked-letter' : 'alphabet-letter'"
+            >
+              <button x-bind:data-char="item" x-text="item"></button>
+            </li>
+          </template>
+        </ul>
+
+        <label>
+          Буква:
+          <input
+            class="user"
+            type="text"
+            maxlength="3"
+            x-model="userAnswerChar"
+            x-on:focus-input.window="$el.focus()"
+            x-on:input="onChangeInput"
+          >
+        </label>
+      </div>
       <div x-text="statusMatchedLetters" class="status"></div>
     </div>
 
@@ -69,6 +95,7 @@
     document.addEventListener('alpine:init', () => {
       Alpine.store('dbWords', {
           words: [],
+          alphabet: [ 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', '-'],
           countAllWordsDB: 0,
           getRandomSecretWord() {
             const randomNumber = Math.floor(Math.random() * this.words.length);
@@ -94,6 +121,7 @@
         letters: [],
         attempts: 0,
         matchedLetters: [],
+        clickedLetters: [],
         userAnswerChar: '',
         outUserAnswer: '',
         statusGame: '',
@@ -183,6 +211,7 @@
           this.attempts = (this.remainingLetters / 1.7).toFixed();
           this.gameStarted = true;
           this.statusGame = '';
+          this.$dispatch('focus-input');
         },
         init() {
           if (!this.$store.dbWords.words.length && !this.gameStarted) {
