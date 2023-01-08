@@ -115,7 +115,6 @@ li {
   box-shadow: 0 0 6px #785814, inset 0 0 5px #F4E5C6;
   border-radius: 14px;
   padding: 10px 7px;
-  position: relative;
 }
 
 .tips-all-words {
@@ -226,6 +225,7 @@ li {
   margin: 20px;
   padding: 14px;
   width: 600px;
+  position: relative;
 }
 
 .footer a {
