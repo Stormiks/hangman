@@ -26,9 +26,6 @@
   </nav>
 
   <main x-data="app" class="main">
-    <div class="tips-all-words">
-      <p>Слов в базе: <span x-text="countAllWordsDB"></span></p>
-    </div>
     <label>
       Буква:
       <input
@@ -62,14 +59,37 @@
   </main>
 
   <footer x-data="footer" class="footer">
+    <div class="tips-all-words">
+      <p>Слов в базе: <span x-text="$store.dbWords.countAllWordsDB"></span></p>
+    </div>
     <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
   </footer>
   <script>
     // Word base taken from https://github.com/Harrix/Russian-Nouns
     document.addEventListener('alpine:init', () => {
+      Alpine.store('dbWords', {
+          words: [],
+          countAllWordsDB: 0,
+          getRandomSecretWord() {
+            const randomNumber = Math.floor(Math.random() * this.words.length);
+            return this.onRemoveWord(randomNumber);
+          },
+          onRemoveWord(indexStart) {
+            return this.words.splice(indexStart, 1)[0];
+          },
+          init() {
+            fetch('/db-words.json', {
+              method: 'GET',
+            }).then((data) => data.json())
+              .then((words) => {
+                this.countAllWordsDB = words.length;
+                this.words = words;
+              });
+          }
+      });
+
       Alpine.data('app', () => ({
         words: [],
-        countAllWordsDB: 0,
         randomWord: '',
         letters: [],
         attempts: 0,
@@ -105,22 +125,21 @@
           return true;
         },
         splitLetters() {
-          const word = this.randomWord.split('')
+          const word = this.randomWord.split('');
 
           word.forEach((w, index) => {
             this.matchedLetters.push("_");
           });
         },
         askWord() {
-          const randomNumber = Math.floor(Math.random() * this.words.length);
-          const secretWord = this.words.splice(randomNumber, 1)[0];
+          const secretWord = this.$store.dbWords.getRandomSecretWord();
           this.randomWord = secretWord;
           this.letters = secretWord.split('');
           this.splitLetters();
         },
         onChangeInput(e) {
           if (!this.gameStarted) {
-            return false
+            return false;
           }
 
           if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
@@ -131,7 +150,7 @@
             return false;
           }
 
-          this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data
+          this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data;
 
           if (this.validateUserAnswer(e.data)) {
             this.outUserAnswer = String(e.data).toUpperCase();
@@ -163,17 +182,13 @@
           this.askWord();
           this.attempts = (this.remainingLetters / 1.7).toFixed();
           this.gameStarted = true;
+          this.statusGame = '';
         },
         init() {
-          fetch('/db-words.json', {
-            method: 'GET',
-          }).then((data) => data.json())
-            .then((data) => {
-              this.countAllWordsDB = data.length;
-              this.words = data;
-              this.onLaunchNewGame();
-            });
-        },
+          if (!this.$store.dbWords.words.length && !this.gameStarted) {
+            this.statusGame = 'Нажмите "Новая игра" для начала игры';
+          }
+        }
       }));
 
       Alpine.data('footer', () => ({
