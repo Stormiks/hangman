@@ -26,38 +26,68 @@
   </nav>
 
   <main x-data="app" class="main">
-    <label>
-      Буква:
-      <input
-        class="user"
-        type="text"
-        maxlength="3"
-        x-model="userAnswerChar"
-        x-on:input="onChangeInput"
-      >
-    </label>
-    <br>
-
-    <div class="stats">
-      <div class="block-inf">
-        <div class="ms">Ваша буква: <big x-text="outUserAnswer" class="msg" id="msg"></big></div>
+    <div class="app-options" x-show="!gameStarted" x-transition.duration.300ms>
+      <form>
+        <legend>Способ ввода букв:</legend>
+        <label>
+          <input
+            type="radio"
+            name="eventInput"
+            value="keyboardHardware"
+            x-model="inputMethodName"
+          >
+          Клавиатура устройства
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="eventInput"
+            value="keyboardScreen"
+            x-model="inputMethodName"
+          >
+          Экранная клавиатура
+        </label>
+      </form>
+    </div>
+    <div class="app-stats">
+      <div class="app-game-info">
+        <div class="ms">Ваша буква: <big x-text="userAnswerChar" class="msg" id="msg"></big></div>
         <div class="ms">Попытки: <big x-text="attempts"></big></div>
         <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
       </div>
-      <div class="alphabet-wrapper">
+      <div class="status">
+        <template x-for="letter in matchedLetters">
+          <span
+            class="status-matched-letter"
+            x-bind:key="'status-matched-letter' + letter"
+            x-text="letter"
+          ></span>
+        </template>
+      </div>
+    </div>
+    <div class="alphabet-wrapper">
+      <template x-if="inputMethodName === 'keyboardScreen'">
         <ul class="alphabet">
           <template
             x-for="item in $store.dbWords.alphabet"
           >
             <li
               class="letter"
+              x-bind:key="'letter-key-' + item"
               x-bind:class="clickedLetters.includes(item) ? 'clicked-letter' : 'alphabet-letter'"
             >
-              <button x-bind:data-char="item" x-text="item"></button>
+              <button
+                class="btn"
+                x-bind:data-char="item"
+                x-text="item"
+                x-on:click="onChangeInput($event)"
+              ></button>
             </li>
           </template>
         </ul>
+      </template>
 
+      <template x-if="inputMethodName === 'keyboardHardware'">
         <label>
           Буква:
           <input
@@ -69,18 +99,17 @@
             x-on:input="onChangeInput"
           >
         </label>
-      </div>
-      <div x-text="statusMatchedLetters" class="status"></div>
+      </template>
     </div>
 
     <div class="end" x-text="statusGame"></div>
     <br>
 
     <button
-      class="btn"
+      class="btn btn-new-game"
       id="newGame"
       x-on:click="onLaunchNewGame"
-      x-bind:disabled="gameStarted"
+      x-bind:disabled="gameStarted || inputMethodName === ''"
     >Новая игра</button>
   </main>
 
@@ -91,6 +120,23 @@
     <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
   </footer>
   <script>
+    const controlKeyboardMethods = {
+      keyboardHardware: function(e) {
+        if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
+          return false;
+        }
+
+        if (e.data === '') {
+          return false;
+        }
+
+        return e.target.value > 1 ? e.target.value.split('')[1] : e.data;
+      },
+      keyboardScreen: function(e) {
+        return e.target.dataset.char;
+      },
+    };
+
     // Word base taken from https://github.com/Harrix/Russian-Nouns
     document.addEventListener('alpine:init', () => {
       Alpine.store('dbWords', {
@@ -102,7 +148,7 @@
             return this.onRemoveWord(randomNumber);
           },
           onRemoveWord(indexStart) {
-            return this.words.splice(indexStart, 1)[0];
+            return this.words.splice(indexStart, 1)[0].toUpperCase();
           },
           init() {
             fetch('/db-words.json', {
@@ -123,12 +169,9 @@
         matchedLetters: [],
         clickedLetters: [],
         userAnswerChar: '',
-        outUserAnswer: '',
         statusGame: '',
+        inputMethodName: '',
         gameStarted: false,
-        get statusMatchedLetters () {
-          return this.matchedLetters.join('.');
-        },
         get remainingLetters() {
           return this.matchedLetters.filter((char) => char === '_').length;
         },
@@ -170,21 +213,14 @@
             return false;
           }
 
-          if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
-            return false;
-          }
+          let userChar = controlKeyboardMethods[this.inputMethodName].apply(this, arguments).toUpperCase();
 
-          if (e.data === '') {
-            return false;
-          }
+          this.clickedLetters.push(userChar);
+          this.userAnswerChar = userChar;
 
-          this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data;
-
-          if (this.validateUserAnswer(e.data)) {
-            this.outUserAnswer = String(e.data).toUpperCase();
-
+          if (this.validateUserAnswer(userChar)) {
             const charPositions = this.letters.reduce((acc, char, index) => {
-              if (char === e.data) {
+              if (char === userChar) {
                 acc[index] = char;
               }
 
