@@ -26,35 +26,90 @@
   </nav>
 
   <main x-data="app" class="main">
-    <label>
-      Буква:
-      <input
-        class="user"
-        type="text"
-        maxlength="3"
-        x-model="userAnswerChar"
-        x-on:input="onChangeInput"
-      >
-    </label>
-    <br>
-
-    <div class="stats">
-      <div class="block-inf">
-        <div class="ms">Ваша буква: <big x-text="outUserAnswer" class="msg" id="msg"></big></div>
+    <div class="app-options" x-show="!gameStarted" x-transition.duration.300ms>
+      <form>
+        <legend>Способ ввода букв:</legend>
+        <label>
+          <input
+            type="radio"
+            name="eventInput"
+            value="keyboardHardware"
+            x-model="optionsGame.inputMethodName"
+          >
+          Клавиатура устройства
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="eventInput"
+            value="keyboardScreen"
+            x-model="optionsGame.inputMethodName"
+          >
+          Экранная клавиатура
+        </label>
+      </form>
+    </div>
+    <div class="app-stats">
+      <div class="app-game-info">
+        <div class="ms">Ваша буква: <big x-text="userAnswerChar" class="msg" id="msg"></big></div>
         <div class="ms">Попытки: <big x-text="attempts"></big></div>
         <div class="ms">Количество оставшихся букв: <big x-text="remainingLetters"></big></div>
       </div>
-      <div x-text="statusMatchedLetters" class="status"></div>
+      <div class="status">
+        <template x-for="letter in matchedLetters">
+          <span
+            class="status-matched-letter"
+            x-bind:key="'status-matched-letter' + letter"
+            x-text="letter"
+          ></span>
+        </template>
+      </div>
+    </div>
+    <div class="alphabet-wrapper" x-bind:class="{ 'pointer-events-none': !gameStarted }">
+      <template x-if="optionsGame.inputMethodName === 'keyboardScreen'">
+        <ul class="alphabet">
+          <template
+            x-for="item in $store.dbWords.alphabet"
+          >
+            <li
+              class="letter"
+              x-bind:key="'letter-key-' + item"
+              x-bind:class="clickedLetters.includes(item) ? 'clicked-letter' : 'alphabet-letter'"
+            >
+              <button
+                class="btn"
+                x-bind:data-char="item"
+                x-text="item"
+                x-on:click="onChangeInput($event)"
+              ></button>
+            </li>
+          </template>
+        </ul>
+      </template>
+
+      <template x-if="optionsGame.inputMethodName === 'keyboardHardware'">
+        <label>
+          Буква:
+          <input
+            class="user"
+            type="text"
+            maxlength="3"
+            x-model="userAnswerChar"
+            x-on:focus-input.window="$el.focus()"
+            x-on:input="onChangeInput"
+          >
+        </label>
+      </template>
     </div>
 
     <div class="end" x-text="statusGame"></div>
     <br>
 
     <button
-      class="btn"
+      class="btn btn-new-game"
       id="newGame"
       x-on:click="onLaunchNewGame"
-      x-bind:disabled="gameStarted"
+      x-bind:disabled="gameStarted || !optionsGame.inputMethodName"
     >Новая игра</button>
   </main>
 
@@ -65,17 +120,35 @@
     <span x-text="year"></span> &#10037;<a href="https://stormiks.github.io">Skylinker</a>
   </footer>
   <script>
+    const controlKeyboardMethods = {
+      keyboardHardware: function(e) {
+        if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
+          return false;
+        }
+
+        if (e.data === '') {
+          return false;
+        }
+
+        return e.target.value > 1 ? e.target.value.split('')[1] : e.data;
+      },
+      keyboardScreen: function(e) {
+        return e.target.dataset.char;
+      },
+    };
+
     // Word base taken from https://github.com/Harrix/Russian-Nouns
     document.addEventListener('alpine:init', () => {
       Alpine.store('dbWords', {
           words: [],
+          alphabet: [ 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', '-'],
           countAllWordsDB: 0,
           getRandomSecretWord() {
             const randomNumber = Math.floor(Math.random() * this.words.length);
             return this.onRemoveWord(randomNumber);
           },
           onRemoveWord(indexStart) {
-            return this.words.splice(indexStart, 1)[0];
+            return this.words.splice(indexStart, 1)[0].toUpperCase();
           },
           init() {
             fetch('/db-words.json', {
@@ -94,13 +167,13 @@
         letters: [],
         attempts: 0,
         matchedLetters: [],
+        clickedLetters: [],
         userAnswerChar: '',
-        outUserAnswer: '',
         statusGame: '',
-        gameStarted: false,
-        get statusMatchedLetters () {
-          return this.matchedLetters.join('.');
+        optionsGame: {
+          inputMethodName: null,
         },
+        gameStarted: false,
         get remainingLetters() {
           return this.matchedLetters.filter((char) => char === '_').length;
         },
@@ -110,8 +183,15 @@
         get hasRemainingLetters() {
           return this.remainingLetters > 0;
         },
-        get hasWinnerGame() {
-          return this.hasCountAnswerGame && !this.hasRemainingLetters;
+        get isValidOptGame() {
+          return Object.entries(this.optionsGame).every(([key, val]) => val !== null);
+        },
+        get guessedLetters() {
+          return this.clickedLetters.filter((val) => {
+            if (this.letters.includes(val)) {
+              return val;
+            }
+          });
         },
         validateUserAnswer(val) {
           if (!this.letters.includes(val)) {
@@ -142,52 +222,79 @@
             return false;
           }
 
-          if (['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
-            return false;
-          }
+          let userChar = controlKeyboardMethods[this.optionsGame.inputMethodName].apply(this, arguments).toUpperCase();
 
-          if (e.data === '') {
-            return false;
-          }
-
-          this.userAnswerChar = e.target.value > 1 ? e.target.value.split('')[1] : e.data;
-
-          if (this.validateUserAnswer(e.data)) {
-            this.outUserAnswer = String(e.data).toUpperCase();
-
-            const charPositions = this.letters.reduce((acc, char, index) => {
-              if (char === e.data) {
-                acc[index] = char;
-              }
-
-              return acc;
-            }, {});
-
-            for (let key of Object.keys(charPositions)) {
-              this.matchedLetters[key] = this.letters[key];
-            }
-          } else {
-            --this.attempts;
-          }
-
-          if (!this.hasCountAnswerGame) {
-            this.statusGame = 'Вы проиграли! :(';
-            this.gameStarted = false;
-          } else if (!this.hasRemainingLetters) {
-            this.statusGame = 'Вы выиграли! :)';
-            this.gameStarted = false;
-          }
+          this.clickedLetters.push(userChar);
+          this.userAnswerChar = userChar;
         },
         onLaunchNewGame() {
+          this.userAnswerChar = null;
+          this.clickedLetters = [];
+          this.matchedLetters = [];
           this.askWord();
-          this.attempts = (this.remainingLetters / 1.7).toFixed();
-          this.gameStarted = true;
+          this.attempts = Number((this.remainingLetters / 1.7).toFixed());
           this.statusGame = '';
+          this.gameStarted = true;
+          this.$dispatch('focus-input');
+        },
+        replaceLetters(charPositions) {
+          for (let key of Object.keys(charPositions)) {
+            this.matchedLetters[key] = this.letters[key];
+          }
         },
         init() {
-          if (!this.$store.dbWords.words.length && !this.gameStarted) {
-            this.statusGame = 'Нажмите "Новая игра" для начала игры';
+          function onChangeMsgGame() {
+            if (!this.isValidOptGame) {
+              this.statusGame = 'Настройте игру в соответствии с вашими предпочтениями';
+              return;
+            }
+
+            if (
+              !this.gameStarted && this.hasCountAnswerGame ||
+              !this.gameStarted && this.guessedLetters.length === this.matchedLetters.length
+            ) {
+              this.statusGame = 'Нажмите "Новая игра" для начала игры';
+              return;
+            }
           }
+
+          this.$watch('optionsGame.inputMethodName', onChangeMsgGame.bind(this));
+
+          this.$watch('hasCountAnswerGame', onChangeMsgGame.bind(this));
+
+          this.$watch('guessedLetters', onChangeMsgGame.bind(this));
+
+          this.$watch('userAnswerChar', (val) => {
+            if (this.validateUserAnswer(val)) {
+              const charPositions = this.letters.reduce((acc, char, index) => {
+                if (char === val) {
+                  acc[index] = char;
+                }
+
+                return acc;
+              }, {});
+
+              this.replaceLetters(charPositions);
+            } else {
+              --this.attempts;
+            }
+
+            if (!this.hasCountAnswerGame) {
+              this.statusGame = 'Вы проиграли! :(';
+              this.gameStarted = false;
+            } else if (!this.hasRemainingLetters) {
+              this.statusGame = 'Вы выиграли! :)';
+              this.gameStarted = false;
+            }
+          });
+
+          this.$watch('gameStarted', (val) => {
+            if (!val) {
+              this.replaceLetters(this.letters);
+            }
+          });
+
+          onChangeMsgGame.apply(this);
         }
       }));
 

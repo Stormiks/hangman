@@ -30,6 +30,11 @@ li {
   padding: 0;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+  filter: opacity(.5);
+}
+
 .body {
   display: grid;
   grid-template-rows: 120px 64px 1fr 92px;
@@ -110,11 +115,15 @@ li {
 
 .main {
   align-self: center;
-  width: 500px;
+  width: 600px;
   background-image: url('/assets/img/wood_3.jpg');
   box-shadow: 0 0 6px #785814, inset 0 0 5px #F4E5C6;
   border-radius: 14px;
-  padding: 10px 7px;
+  padding: 10px 17px;
+}
+
+.app-options {
+  text-align: left;
 }
 
 .tips-all-words {
@@ -145,15 +154,16 @@ li {
   height: 40px;
 }
 
-.stats {
+.app-stats {
   border: 1px dotted #5E3956;
   border-radius: 5px;
   background-image: url('/assets/img/5-fon-svetlogo-melkogo-karbona.png');
-  margin: 5px 10px 2px 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   padding: 20px;
 }
 
-.block-inf {
+.app-game-info {
   text-align: left;
 }
 
@@ -182,7 +192,15 @@ li {
   background-color: #FFBA61;
   margin: 20px 10px 10px 10px;
   padding: 5px;
-  height: 35px;
+  min-height: 34px;
+}
+
+.status-matched-letter {
+  margin-left: 1px;
+  margin-right: 1px;
+  width: .8em;
+  height: inherit;
+  display: inline-block;
 }
 
 .end {
@@ -195,17 +213,20 @@ li {
 }
 
 .btn {
+  transition: .1s all;
+}
+
+.btn-new-game {
   color: #DDB27A;
   background-color: #A65E00;
   border: none;
   border-radius: 15px;
+  letter-spacing: 1px;
   box-shadow: 0 2px 10px 1px #000;
   font-size: 13pt;
   font-family: "Times New Roman", Times, Baskerville, Georgia, serif;
-  letter-spacing: 1px;
   padding: 6px;
   width: 150px;
-  transition: .1s all;
 }
 
 .btn[disabled] {
@@ -216,6 +237,51 @@ li {
   color: #DDB27A;
   background-color: #703F00;
   box-shadow: inset 0 0 2px 1px #F4E5C6, 0 2px 7px 1px #412B00;
+}
+
+.alphabet-wrapper {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: all .12s ease-in-out;
+}
+
+.alphabet .letter {
+  display: inline-block;
+  margin: 3px 3px;
+  box-sizing: content-box;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 24%);
+}
+
+.alphabet button {
+  line-height: 1.4;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #ddd;
+  border: none;
+  width: 34px;
+  height: 34px;
+}
+
+.alphabet .alphabet-letter button {
+  color: #333;
+  transition: all 0.1s ease;
+}
+
+.alphabet .alphabet-letter button:hover,
+.alphabet .alphabet-letter button:focus {
+  background: #607d8b;
+  color: #fff;
+}
+
+.clicked-letter {
+  pointer-events: none;
+}
+
+.clicked-letter button {
+  color: #a9a9a9;
 }
 
 .footer {
