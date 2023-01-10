@@ -65,7 +65,7 @@
         </template>
       </div>
     </div>
-    <div class="alphabet-wrapper">
+    <div class="alphabet-wrapper" x-bind:class="{ 'pointer-events-none': !gameStarted }">
       <template x-if="inputMethodName === 'keyboardScreen'">
         <ul class="alphabet">
           <template

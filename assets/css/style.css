@@ -30,6 +30,11 @@ li {
   padding: 0;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+  filter: opacity(.5);
+}
+
 .body {
   display: grid;
   grid-template-rows: 120px 64px 1fr 92px;
@@ -238,6 +243,7 @@ li {
   display: block;
   padding-top: 5px;
   padding-bottom: 5px;
+  transition: all .12s ease-in-out;
 }
 
 .alphabet .letter {
