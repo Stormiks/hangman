@@ -262,9 +262,28 @@
           this.$dispatch('focus-input');
         },
         init() {
-          if (!this.$store.dbWords.words.length && !this.gameStarted) {
-            this.statusGame = 'Нажмите "Новая игра" для начала игры';
+          function onChangeMsgGame(value, val2) {
+            if (!this.isValidOptGame) {
+              this.statusGame = 'Настройте игру в соответствии с вашими предпочтениями';
+              return;
+            }
+
+            if (
+              !this.gameStarted && this.hasCountAnswerGame ||
+              !this.gameStarted && this.guessedLetters.length === this.matchedLetters.length
+            ) {
+              this.statusGame = 'Нажмите "Новая игра" для начала игры';
+              return;
+            }
           }
+
+          this.$watch('optionsGame.inputMethodName', onChangeMsgGame.bind(this));
+
+          this.$watch('hasCountAnswerGame', onChangeMsgGame.bind(this));
+
+          this.$watch('guessedLetters', onChangeMsgGame.bind(this));
+
+          onChangeMsgGame.apply(this);
         }
       }));
 
