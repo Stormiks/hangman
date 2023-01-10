@@ -186,6 +186,13 @@
         get isValidOptGame() {
           return Object.entries(this.optionsGame).every(([key, val]) => val !== null);
         },
+        get guessedLetters() {
+          return this.clickedLetters.filter((val) => {
+            if (this.letters.includes(val)) {
+              return val;
+            }
+          });
+        },
         validateUserAnswer(val) {
           if (!this.letters.includes(val)) {
             return false;
