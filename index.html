@@ -244,7 +244,7 @@
         },
         onLaunchNewGame() {
           this.askWord();
-          this.attempts = (this.remainingLetters / 1.7).toFixed();
+          this.attempts = Number((this.remainingLetters / 1.7).toFixed());
           this.statusGame = '';
           this.gameStarted = true;
           this.$dispatch('focus-input');
