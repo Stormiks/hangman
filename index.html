@@ -34,7 +34,7 @@
             type="radio"
             name="eventInput"
             value="keyboardHardware"
-            x-model="inputMethodName"
+            x-model="optionsGame.inputMethodName"
           >
           Клавиатура устройства
         </label>
@@ -43,7 +43,7 @@
             type="radio"
             name="eventInput"
             value="keyboardScreen"
-            x-model="inputMethodName"
+            x-model="optionsGame.inputMethodName"
           >
           Экранная клавиатура
         </label>
@@ -66,7 +66,7 @@
       </div>
     </div>
     <div class="alphabet-wrapper" x-bind:class="{ 'pointer-events-none': !gameStarted }">
-      <template x-if="inputMethodName === 'keyboardScreen'">
+      <template x-if="optionsGame.inputMethodName === 'keyboardScreen'">
         <ul class="alphabet">
           <template
             x-for="item in $store.dbWords.alphabet"
@@ -87,7 +87,7 @@
         </ul>
       </template>
 
-      <template x-if="inputMethodName === 'keyboardHardware'">
+      <template x-if="optionsGame.inputMethodName === 'keyboardHardware'">
         <label>
           Буква:
           <input
@@ -109,7 +109,7 @@
       class="btn btn-new-game"
       id="newGame"
       x-on:click="onLaunchNewGame"
-      x-bind:disabled="gameStarted || inputMethodName === ''"
+      x-bind:disabled="gameStarted || !optionsGame.inputMethodName"
     >Новая игра</button>
   </main>
 
@@ -170,7 +170,9 @@
         clickedLetters: [],
         userAnswerChar: '',
         statusGame: '',
-        inputMethodName: '',
+        optionsGame: {
+          inputMethodName: null,
+        },
         gameStarted: false,
         get remainingLetters() {
           return this.matchedLetters.filter((char) => char === '_').length;
@@ -181,8 +183,8 @@
         get hasRemainingLetters() {
           return this.remainingLetters > 0;
         },
-        get hasWinnerGame() {
-          return this.hasCountAnswerGame && !this.hasRemainingLetters;
+        get isValidOptGame() {
+          return Object.entries(this.optionsGame).every(([key, val]) => val !== null);
         },
         validateUserAnswer(val) {
           if (!this.letters.includes(val)) {
@@ -213,7 +215,7 @@
             return false;
           }
 
-          let userChar = controlKeyboardMethods[this.inputMethodName].apply(this, arguments).toUpperCase();
+          let userChar = controlKeyboardMethods[this.optionsGame.inputMethodName].apply(this, arguments).toUpperCase();
 
           this.clickedLetters.push(userChar);
           this.userAnswerChar = userChar;
