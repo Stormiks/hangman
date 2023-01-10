@@ -243,6 +243,9 @@
           }
         },
         onLaunchNewGame() {
+          this.userAnswerChar = null;
+          this.clickedLetters = [];
+          this.matchedLetters = [];
           this.askWord();
           this.attempts = Number((this.remainingLetters / 1.7).toFixed());
           this.statusGame = '';
