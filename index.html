@@ -226,30 +226,6 @@
 
           this.clickedLetters.push(userChar);
           this.userAnswerChar = userChar;
-
-          if (this.validateUserAnswer(userChar)) {
-            const charPositions = this.letters.reduce((acc, char, index) => {
-              if (char === userChar) {
-                acc[index] = char;
-              }
-
-              return acc;
-            }, {});
-
-            for (let key of Object.keys(charPositions)) {
-              this.matchedLetters[key] = this.letters[key];
-            }
-          } else {
-            --this.attempts;
-          }
-
-          if (!this.hasCountAnswerGame) {
-            this.statusGame = 'Вы проиграли! :(';
-            this.gameStarted = false;
-          } else if (!this.hasRemainingLetters) {
-            this.statusGame = 'Вы выиграли! :)';
-            this.gameStarted = false;
-          }
         },
         onLaunchNewGame() {
           this.userAnswerChar = null;
@@ -260,6 +236,11 @@
           this.statusGame = '';
           this.gameStarted = true;
           this.$dispatch('focus-input');
+        },
+        replaceLetters(charPositions) {
+          for (let key of Object.keys(charPositions)) {
+            this.matchedLetters[key] = this.letters[key];
+          }
         },
         init() {
           function onChangeMsgGame(value, val2) {
@@ -282,6 +263,36 @@
           this.$watch('hasCountAnswerGame', onChangeMsgGame.bind(this));
 
           this.$watch('guessedLetters', onChangeMsgGame.bind(this));
+
+          this.$watch('userAnswerChar', (val) => {
+            if (this.validateUserAnswer(val)) {
+              const charPositions = this.letters.reduce((acc, char, index) => {
+                if (char === val) {
+                  acc[index] = char;
+                }
+
+                return acc;
+              }, {});
+
+              this.replaceLetters(charPositions);
+            } else {
+              --this.attempts;
+            }
+
+            if (!this.hasCountAnswerGame) {
+              this.statusGame = 'Вы проиграли! :(';
+              this.gameStarted = false;
+            } else if (!this.hasRemainingLetters) {
+              this.statusGame = 'Вы выиграли! :)';
+              this.gameStarted = false;
+            }
+          });
+
+          this.$watch('gameStarted', (val) => {
+            if (!val) {
+              this.replaceLetters(this.letters);
+            }
+          });
 
           onChangeMsgGame.apply(this);
         }
