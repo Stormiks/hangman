@@ -126,7 +126,13 @@
           return false;
         }
 
-        return e.target.value > 1 ? e.target.value.split('')[1] : e.data;
+        if (e.target.value.length > 1) {
+          e.target.value = e.target.value.split('')[1];
+          return e.target.value;
+        }
+
+        return e.data;
+
       },
       keyboardScreen: function(e) {
         return e.target.dataset.char;
