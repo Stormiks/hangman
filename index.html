@@ -226,8 +226,10 @@
 
           let userChar = controlKeyboardMethods[this.optionsGame.inputMethodName].apply(this, arguments).toUpperCase();
 
-          this.clickedLetters.push(userChar);
-          this.userAnswerChar = userChar;
+          if (!this.clickedLetters.includes(userChar)) {
+            this.clickedLetters.push(userChar);
+            this.userAnswerChar = userChar;
+          }
         },
         onLaunchNewGame() {
           this.userAnswerChar = null;
