@@ -239,7 +239,7 @@
           this.attempts = Number((this.remainingLetters / 1.7).toFixed());
           this.statusGame = '';
           this.gameStarted = true;
-          this.$dispatch('focus-input');
+          this.$nextTick(() => this.$dispatch('focus-input'));
         },
         replaceLetters(charPositions) {
           for (let key of Object.keys(charPositions)) {
