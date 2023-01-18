@@ -239,11 +239,12 @@ li {
   box-shadow: inset 0 0 2px 1px #F4E5C6, 0 2px 7px 1px #412B00;
 }
 
-.alphabet-wrapper {
-  display: block;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  transition: all .12s ease-in-out;
+.clicked-letter {
+  pointer-events: none;
+}
+
+.clicked-letter button {
+  color: #a9a9a9;
 }
 
 .alphabet .letter {
@@ -265,23 +266,53 @@ li {
   height: 34px;
 }
 
-.alphabet .alphabet-letter button {
-  color: #333;
-  transition: all 0.1s ease;
+.alphabet-wrapper {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: all .12s ease-in-out;
 }
 
-.alphabet .alphabet-letter button:hover,
-.alphabet .alphabet-letter button:focus {
+.alphabet-letter button:hover,
+.alphabet-letter button:focus {
   background: #607d8b;
   color: #fff;
 }
 
-.clicked-letter {
-  pointer-events: none;
+.alphabet-input-wrapper {
+  display: grid;
+  grid-template-columns: minmax(150px, 20%) 1fr;
 }
 
-.clicked-letter button {
-  color: #a9a9a9;
+.alphabet-col,
+.alphabet-col label {
+  text-align: left;
+}
+
+.alphabet-input-wrapper input {
+  display: block;
+  margin-left: 0;
+}
+
+.alphabet-input-wrapper ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.alphabet-input-wrapper .letter {
+  box-shadow: none;
+}
+
+.alphabet-input-wrapper .btn {
+  pointer-events: none;
+  font-size: 18px;
+  height: calc(34px - (18px / 2));
+  width: calc(34px - (18px / 3));
+}
+
+.alphabet .alphabet-letter button {
+  color: #333;
+  transition: all 0.1s ease;
 }
 
 .footer {
