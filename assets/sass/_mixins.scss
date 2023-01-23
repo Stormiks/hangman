@@ -1,0 +1,16 @@
+// Variables:
+//    @Family:    type 'string'
+//    @FontStyle: type 'string'
+//    @srcFonts:  type 'string'
+@mixin setFont($Family, $FontStyle, $srcFonts: "#{srcDirFonts}", $isTTF: false, $isWOFF: false) {
+  @font-face {
+    font-family: "#{$Family} #{$FontStyle}";
+    src: local("#{$Family} #{$FontStyle}");
+    @if $isTTF {
+      src: url("#{$srcDirFonts}/#{$Family}-#{$FontStyle}.ttf") format("truetype");
+    }
+    @if $isWOFF {
+      src: url("#{$srcDirFonts}/#{$Family}-#{$FontStyle}.woff") format("woff");
+    }
+  }
+}

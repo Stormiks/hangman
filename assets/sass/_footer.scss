@@ -1,0 +1,21 @@
+.footer {
+  background-color: #FFC273;
+  border-radius: 10px;
+  border: 1px solid #F29721;
+  margin: 20px;
+  padding: 14px;
+  width: 600px;
+  position: relative;
+
+  a {
+    margin: 0;
+    font-size: 14pt;
+    color: #BF8130;
+    text-decoration: none;
+
+    &:hover,
+    &:visited {
+      color: #BF8130;
+    }
+  }
+}
