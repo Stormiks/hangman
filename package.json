@@ -1,0 +1,14 @@
+{
+  "name": "hangman",
+  "version": "3.2.0",
+  "scripts": {
+    "build:style": "sass --style=compressed ./assets/sass/style.scss ./assets/css/style.bundle.css"
+  },
+  "author": {
+    "name": "Skylinker"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.*"
+  }
+}

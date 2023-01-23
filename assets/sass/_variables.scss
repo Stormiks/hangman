@@ -1,0 +1,20 @@
+$URI: "";
+$dirGlobal: "#{$URI}/assets";
+
+$srcDirFonts: "#{$dirGlobal}/fonts";
+
+/** FONTS FAMILY **/
+$FRoboto: "Roboto";
+$FVerdana: "Verdana";
+$FRwl: "Rockwell";
+
+// Font styles
+$FontWeightBlack: "Black";
+$FontWeightLight: "Light";
+$FontWeightExtraBold: "ExtraBold";
+
+// The full end name of the font according to the file name (before the extension, without the dot)
+$FFRBlack: "#{$FRoboto} #{$FontWeightBlack}";
+$FFRLight: "#{$FRoboto} #{$FontWeightLight}";
+
+$FFRwlExtraBold: "#{$FRwl} #{$FontWeightExtraBold}";

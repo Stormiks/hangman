@@ -1,0 +1,19 @@
+$fonts-enabled: () !default;
+$fonts-enabled: map-merge(
+  (
+    $FRoboto: (
+      "Black": $FontWeightBlack,
+      "Light": $FontWeightLight,
+      ),
+    $FRwl: (
+      "ExtraBold": $FontWeightExtraBold,
+    )
+  ),
+  $fonts-enabled
+);
+
+@each $state, $value in $fonts-enabled {
+  @each $keyWeight, $weight in $value {
+    @include setFont($state, $weight, $isTTF: true);
+  }
+}
